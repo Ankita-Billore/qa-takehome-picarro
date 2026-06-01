@@ -28,10 +28,18 @@ jobs:
         mkdir -p reports/allure-results
         pytest tests/api/ -v --junit-xml=reports/api-results.xml --html=reports/api-report.html --self-contained-html --alluredir=reports/allure-results
     
+    - name: Install Allure CLI (System Tool)
+      if: always()
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y default-jre
+        wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.42.0/allure-commandline-2.42.0.zip
+        unzip allure-commandline-2.42.0.zip -d /opt/
+        sudo ln -s /opt/allure-2.42.0/bin/allure /usr/bin/allure
+    
     - name: Generate Allure Report
       if: always()
       run: |
-        pip install allure-commandline
         allure generate reports/allure-results -o reports/allure-report --clean
     
     - name: Upload API test results
@@ -63,10 +71,18 @@ jobs:
         mkdir -p reports/allure-results
         pytest tests/ui/ -v --junit-xml=reports/ui-results.xml --html=reports/ui-report.html --self-contained-html --alluredir=reports/allure-results
     
+    - name: Install Allure CLI (System Tool)
+      if: always()
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y default-jre
+        wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.42.0/allure-commandline-2.42.0.zip
+        unzip allure-commandline-2.42.0.zip -d /opt/
+        sudo ln -s /opt/allure-2.42.0/bin/allure /usr/bin/allure
+    
     - name: Generate Allure Report
       if: always()
       run: |
-        pip install allure-commandline
         allure generate reports/allure-results -o reports/allure-report --clean
     
     - name: Upload UI test results
@@ -98,10 +114,18 @@ jobs:
         mkdir -p reports/allure-results
         pytest -m smoke -v --junit-xml=reports/smoke-results.xml --html=reports/smoke-report.html --self-contained-html --alluredir=reports/allure-results
     
+    - name: Install Allure CLI (System Tool)
+      if: always()
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y default-jre
+        wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.42.0/allure-commandline-2.42.0.zip
+        unzip allure-commandline-2.42.0.zip -d /opt/
+        sudo ln -s /opt/allure-2.42.0/bin/allure /usr/bin/allure
+    
     - name: Generate Allure Report
       if: always()
       run: |
-        pip install allure-commandline
         allure generate reports/allure-results -o reports/allure-report --clean
     
     - name: Upload smoke test results
