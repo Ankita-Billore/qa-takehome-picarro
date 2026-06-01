@@ -7,6 +7,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from playwright.sync_api import sync_playwright, Browser, BrowserContext, Page
+import allure
 
 from utils.config import (
     BROWSER_TYPE,
@@ -31,6 +32,24 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
+
+
+# ============================================================================
+# Allure Report Helper Function
+# ============================================================================
+
+
+def attach_screenshot_to_allure(page):
+    """Attach screenshot to Allure report on test failure."""
+    try:
+        screenshot = page.screenshot()
+        allure.attach(
+            screenshot,
+            name="failure_screenshot",
+            attachment_type=allure.attachment_type.PNG
+        )
+    except Exception as e:
+        logger.warning(f"Could not attach screenshot to Allure: {e}")
 
 
 # ============================================================================
@@ -226,3 +245,7 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "smoke: mark test as a smoke test")
     config.addinivalue_line("markers", "regression: mark test as a regression test")
     config.addinivalue_line("markers", "negative: mark test as a negative test")
+    config.addinivalue_line("markers", "critical: mark test as critical severity")
+    config.addinivalue_line("markers", "blocker: mark test as blocker severity")
+    config.addinivalue_line("markers", "login: mark test related to login functionality")
+    config.addinivalue_line("markers", "employee: mark test related to employee management")

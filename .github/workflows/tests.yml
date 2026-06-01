@@ -24,7 +24,15 @@ jobs:
         pip install -r requirements.txt
     
     - name: Run API tests
-      run: pytest tests/api/ -v --junit-xml=reports/api-results.xml --html=reports/api-report.html --self-contained-html
+      run: |
+        mkdir -p reports/allure-results
+        pytest tests/api/ -v --junit-xml=reports/api-results.xml --html=reports/api-report.html --self-contained-html --alluredir=reports/allure-results
+    
+    - name: Generate Allure Report
+      if: always()
+      run: |
+        pip install allure-commandline
+        allure generate reports/allure-results -o reports/allure-report --clean
     
     - name: Upload API test results
       if: always()
@@ -51,7 +59,15 @@ jobs:
         playwright install
     
     - name: Run UI tests
-      run: pytest tests/ui/ -v --junit-xml=reports/ui-results.xml --html=reports/ui-report.html --self-contained-html
+      run: |
+        mkdir -p reports/allure-results
+        pytest tests/ui/ -v --junit-xml=reports/ui-results.xml --html=reports/ui-report.html --self-contained-html --alluredir=reports/allure-results
+    
+    - name: Generate Allure Report
+      if: always()
+      run: |
+        pip install allure-commandline
+        allure generate reports/allure-results -o reports/allure-report --clean
     
     - name: Upload UI test results
       if: always()
@@ -78,7 +94,15 @@ jobs:
         playwright install
     
     - name: Run smoke tests
-      run: pytest -m smoke -v --junit-xml=reports/smoke-results.xml --html=reports/smoke-report.html --self-contained-html
+      run: |
+        mkdir -p reports/allure-results
+        pytest -m smoke -v --junit-xml=reports/smoke-results.xml --html=reports/smoke-report.html --self-contained-html --alluredir=reports/allure-results
+    
+    - name: Generate Allure Report
+      if: always()
+      run: |
+        pip install allure-commandline
+        allure generate reports/allure-results -o reports/allure-report --clean
     
     - name: Upload smoke test results
       if: always()
